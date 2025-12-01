@@ -1,4 +1,4 @@
-# streamlit_app.py  (à copier-coller tel quel)
+
 import streamlit as st
 import pandas as pd
 import openmeteo_requests
@@ -160,4 +160,5 @@ else:
 45.923, 6.063 # Chamonix
 46.375, 6.458 # Avoriaz
 45.920, -74.150 # Mont Tremblant""", language="text")
+
 
