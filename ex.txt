@@ -1,0 +1,10 @@
+45.8333, 6.8667 # Courchevel 1850 – La Saulire (2740 m)
+45.9231, 6.8694 # Val d'Isère – Bellevarde (2800 m)
+45.2971, 6.5806 # Val Thorens – Cime de Caron (3200 m)
+45.4447, 6.9756 # Tignes – Grande Motte (3456 m)
+45.7650, 6.5670 # Méribel – Mont du Vallon (2952 m)
+46.8333, 9.8167 # Davos Parsenn – Weissfluhjoch (2844 m)
+47.3667, 10.9833 # St Anton am Arlberg – Valluga (2811 m)
+42.5333, 1.7333 # Grandvalira – Pas de la Casa (2580 m)
+39.6333, -106.3833 # Vail – Back Bowls (3500 m+)
+45.9200, -74.1500 # Mont Tremblant – Sommet
