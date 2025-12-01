@@ -8,4 +8,4 @@ and upload a txt file with the following format :
 
 xx.xxxx, yy.yyyy # name
 
-Voir ex.txt dans le repo pour un exemple. 
+See ex.txt for an example of the expected format of the txt file to upload. 
