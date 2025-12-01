@@ -6,13 +6,11 @@ import requests_cache
 from retry_requests import retry
 from datetime import date
 import plotly.express as px
-
-# ------------------- CONFIG API -------------------
+## API call
 cache_session = requests_cache.CachedSession('.cache', expire_after=-1)
 retry_session = retry(cache_session, retries=5, backoff_factor=0.2)
 openmeteo = openmeteo_requests.Client(session=retry_session)
-
-# ------------------- UI -------------------
+# UI 
 st.set_page_config(page_title="Snowfall History", layout="wide")
 st.title("Neige historique – Comparaison & Portefeuille")
 
@@ -24,14 +22,13 @@ end_date = st.sidebar.date_input("Date fin", value=date(2025, 11, 30))
 
 group_by = st.sidebar.selectbox("Regroupement", ["Heure", "Semaine", "Mois"])
 
-# NOUVELLE OPTION : vue individuelle ou portefeuille moyen
 view_mode = st.sidebar.radio(
     "Mode d'affichage",
     ["Stations individuelles", "Moyenne du portefeuille"]
 )
 
+###lecture fichier 
 if uploaded_file is not None:
-    # --- Lecture du fichier ---
     lines = uploaded_file.read().decode("utf-8").splitlines()
     points = []
     for line in lines:
@@ -48,15 +45,14 @@ if uploaded_file is not None:
                 st.warning(f"Ligne ignorée : {line}")
 
     if not points:
-        st.error("Aucun point valide.")
+        st.error("Aucun point valide")
         st.stop()
 
     st.success(f"{len(points)} station(s) chargée(s)")
 
     start_str = start_date.strftime("%Y-%m-%d")
     end_str = end_date.strftime("%Y-%m-%d")
-
-    # --- Récupération données ---
+#charge la data:
     progress_bar = st.progress(0)
     status_text = st.empty()
     all_data = []
@@ -103,7 +99,6 @@ if uploaded_file is not None:
     full_df = pd.concat(all_data, ignore_index=True)
     full_df["date"] = pd.to_datetime(full_df["date"]).dt.tz_localize(None)
 
-    # --- Regroupement temporel ---
     if group_by == "Semaine":
         full_df["period"] = full_df["date"].dt.to_period("W").apply(lambda r: r.start_time)
     elif group_by == "Mois":
@@ -111,17 +106,17 @@ if uploaded_file is not None:
     else:
         full_df["period"] = full_df["date"]
 
-    # --- Agrégation ---
+##agrègation
     if view_mode == "Moyenne du portefeuille":
-        # On moyenne sur toutes les stations à chaque période
+
         agg_df = (full_df.groupby("period")
-                 .agg(total_snowfall_cm=("snowfall_cm", "sum"),      # somme = chute totale
-                      avg_snow_depth_cm=("snow_depth_cm", "mean"),   # moyenne de la hauteur
+                 .agg(total_snowfall_cm=("snowfall_cm", "sum"),     
+                      avg_snow_depth_cm=("snow_depth_cm", "mean"),   
                       max_snow_depth_cm=("snow_depth_cm", "max"))
                  .reset_index())
         agg_df["location"] = "Portefeuille (moyenne)"
 
-        # Graphiques
+## Plot des graphiques   
         st.header("Moyenne du portefeuille")
         fig1 = px.bar(agg_df, x="period", y="total_snowfall_cm",
                       title="Chute de neige totale – Portefeuille")
@@ -132,13 +127,12 @@ if uploaded_file is not None:
                        title="Hauteur moyenne de neige au sol – Portefeuille")
         st.plotly_chart(fig2, use_container_width=True)
 
-        # Tableau + download
+
         st.dataframe(agg_df[["period", "total_snowfall_cm", "avg_snow_depth_cm", "max_snow_depth_cm"]])
         csv = agg_df.to_csv(index=False).encode()
         st.download_button("Télécharger portefeuille (CSV)", csv, "portefeuille_neige.csv", "text/csv")
 
     else:
-        # Mode individuel (comme avant)
         agg_df = (full_df.groupby(["location", "period"])
                  .agg(total_snowfall_cm=("snowfall_cm", "sum"),
                       max_snow_depth_cm=("snow_depth_cm", "max"),
@@ -166,3 +160,4 @@ else:
 45.923, 6.063 # Chamonix
 46.375, 6.458 # Avoriaz
 45.920, -74.150 # Mont Tremblant""", language="text")
+
