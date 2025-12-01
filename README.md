@@ -1,4 +1,6 @@
-This application allows to fetch the historical snow fall numbers for a set of geo points. 
+# Snow Tracker
+
+This application allows to fetch the historical snow fall numbers for a set of geographic points. 
 
 To use, go to : 
 
