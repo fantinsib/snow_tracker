@@ -11,3 +11,5 @@ and upload a txt file with the following format :
 xx.xxxx, yy.yyyy # name
 
 See ex.txt for an example of the expected format of the txt file to upload. 
+
+This application relies on Open-Meteo historical data. Check: https://open-meteo.com/
